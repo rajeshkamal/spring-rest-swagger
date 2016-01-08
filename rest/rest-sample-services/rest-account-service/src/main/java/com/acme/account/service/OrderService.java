@@ -11,13 +11,13 @@ import com.acme.common.rest.exception.NotFoundException;
  */
 public interface OrderService {
 
-	Order create(Order vdi);
+	Order create(Order order);
 
-	Order get(String vdiId) throws NotFoundException;
+	Order get(String orderId) throws NotFoundException;
 
-	void delete(String vdiId);
+	void delete(String orderId);
 
-	Order update(Order vdi);
+	Order update(Order order);
 
 	Page<Order> search(Pageable pageable, String search);
 

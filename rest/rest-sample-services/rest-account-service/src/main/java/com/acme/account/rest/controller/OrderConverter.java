@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.acme.account.rest.model.Order;
 
 /**
- * VDI Converter
+ * Order Converter
  */
 @Component
 public class OrderConverter extends
@@ -26,13 +26,13 @@ public class OrderConverter extends
         return apiOrder;
     }
 
-    public final com.acme.account.dal.model.Order fromResource(final Order apiVDI) {
-        com.acme.account.dal.model.Order entityVDI = new com.acme.account.dal.model.Order();
-        entityVDI.setOrderId(apiVDI.getOrderId());
-        entityVDI.setOrderName(apiVDI.getOrderName());
-        entityVDI.setOrderPrice(apiVDI.getOrderPrice());
-        entityVDI.setNew20Property(apiVDI.getNew20Property());
-        return entityVDI;
+    public final com.acme.account.dal.model.Order fromResource(final Order apiOrder) {
+        com.acme.account.dal.model.Order entityOrder = new com.acme.account.dal.model.Order();
+        entityOrder.setOrderId(apiOrder.getOrderId());
+        entityOrder.setOrderName(apiOrder.getOrderName());
+        entityOrder.setOrderPrice(apiOrder.getOrderPrice());
+        entityOrder.setNew20Property(apiOrder.getNew20Property());
+        return entityOrder;
     }
 
 }
