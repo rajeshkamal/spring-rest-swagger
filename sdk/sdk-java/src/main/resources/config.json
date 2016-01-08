@@ -1,0 +1,9 @@
+{
+  "modelPackage": "com.acme.rest.model",
+  "apiPackage": "com.acme.rest.service",
+  "invokerPackage": "com.acme.rest.runtime",
+  "groupId": "com.acme.rest",
+  "artifactId": "acme-java-sdk",
+  "artifactVersion": "1.0.0",
+  "sourceFolder": ""
+}
