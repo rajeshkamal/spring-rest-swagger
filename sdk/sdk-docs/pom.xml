@@ -14,16 +14,23 @@
   <artifactId>sdk-docs</artifactId>
   <name>sdk-docs</name>
 
+  <repositories>
+    <repository>
+      <id>rubygems-release</id>
+      <url>http://rubygems-proxy.torquebox.org/releases</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>com.acme.rest</groupId>
-      <artifactId>rest-api-config</artifactId>
+      <artifactId>rest-account-service</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.acme.rest</groupId>
-      <artifactId>rest-account-service</artifactId>
+      <artifactId>rest-api-config</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
@@ -57,6 +64,52 @@
       <version>1.7.21</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.github.robwin</groupId>
+      <artifactId>assertj-swagger</artifactId>
+      <version>0.1.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-compat-spec-parser</artifactId>
+      <version>1.0.13</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>swagger-diff</artifactId>
+      <version>1.0.5</version>
+      <type>gem</type>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>gem-maven-plugin</artifactId>
+        <version>1.1.3</version>
+        <executions>
+          <execution>
+            <id>installing swagger-diff gems</id>
+            <goals>
+              <goal>initialize</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>performing the actual swagger-diff to check for backward compatibility</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>compile</phase>
+            <configuration>
+              <execArgs>${project.build.directory}/rubygems/bin/swagger-diff src/main/resources/account-1.0.json src/main/resources/account.json</execArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

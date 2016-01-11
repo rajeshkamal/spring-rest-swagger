@@ -78,8 +78,9 @@ public abstract class SwaggerConfig {
     }
 
     private ApiInfo getApiInfo() {
-        return new ApiInfo(getServiceName(), getServiceName(), "1.0", null, "acme@acme.com",
-                null, null);
+        return new ApiInfo(getServiceName(), getServiceName(), "1.0",
+                "https://github.com/rajeshkamal", "rajeshkamal123@gmail.com",
+                "https://github.com/rajeshkamal", "https://github.com/rajeshkamal");
     }
 
 }

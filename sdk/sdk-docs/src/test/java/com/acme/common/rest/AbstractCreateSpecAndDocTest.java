@@ -3,6 +3,8 @@ package com.acme.common.rest;
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import io.github.robwin.swagger.test.SwaggerAssertions;
+import io.swagger.parser.Swagger20Parser;
 
 import java.io.File;
 
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -52,6 +55,19 @@ public abstract class AbstractCreateSpecAndDocTest {
         this.outputAsciiDir = new File("target/asciidoc/" + getFeatureName());
         this.outputHtmlDir = new File("target/html/");
         this.outputPdfDir = new File("target/pdf/");
+    }
+
+    @Test
+    public void checkIfSpecIsUpdated() throws Exception {
+        String checkedInSwaggerSpecLocation = "src/main/resources/" + getFeatureName() + ".json";
+
+        MvcResult mvcResult =
+                this.mockMvc.perform(get("/spec").accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk()).andReturn();
+
+        String springfoxSwaggerJson = mvcResult.getResponse().getContentAsString();
+        SwaggerAssertions.assertThat(new Swagger20Parser().parse(springfoxSwaggerJson)).isEqualTo(
+                checkedInSwaggerSpecLocation);
     }
 
     @Test

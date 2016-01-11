@@ -1,0 +1,457 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Account Service",
+    "version": "1.0",
+    "title": "Account Service",
+    "termsOfService": "https://github.com/rajeshkamal",
+    "contact": {
+      "name": "rajeshkamal123@gmail.com"
+    },
+    "license": {
+      "name": "https://github.com/rajeshkamal",
+      "url": "https://github.com/rajeshkamal"
+    }
+  },
+  "host": "localhost:5051",
+  "basePath": "/account",
+  "tags": [
+    {
+      "name": "OrderService",
+      "description": "Order Controller"
+    }
+  ],
+  "paths": {
+    "/orders": {
+      "get": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "List Orders",
+        "description": "Get the list of all Orders from the system",
+        "operationId": "getOrders",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search Order params",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of the page you want to retrieve. Default page size is 10.",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page you want to retrieve. Default page number is 0.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Properties that should be sorted by in the format property,property(,ASC|DESC). Default sort direction is ascending. Use multiple sort parameters if you want to switch directions, e.g. ?sort\u003dfirstname\u0026sort\u003dlastname,asc.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PagedResourcesOfOrder"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Create Order",
+        "description": "Create and configure Order",
+        "operationId": "createOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "order",
+            "description": "Create Order configuration",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Get Order",
+        "description": "Get the details of a specific Order",
+        "operationId": "getOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order\u0027s unique identifier",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Update Order",
+        "description": "Update the configurable details of a Order",
+        "operationId": "updateOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order\u0027s unique identifier",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "order",
+            "description": "Order\u0027s configuration that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Delete Order",
+        "description": "Delete a specific Order",
+        "operationId": "deleteOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order\u0027s unique identifier",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/action/cancel": {
+      "post": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Cancel Order",
+        "description": "Cancel the Order",
+        "operationId": "cancelOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order\u0027s unique identifier",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/action/deprecated-op": {
+      "post": {
+        "tags": [
+          "OrderService"
+        ],
+        "summary": "Deprecated operation",
+        "operationId": "deprecatedOperation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order\u0027s unique identifier",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "deprecated": true
+      }
+    }
+  },
+  "definitions": {
+    "Link": {
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "rel": {
+          "type": "string"
+        },
+        "templated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PageMetadata": {
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalElements": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Task": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Task unique identifier",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "description": "Task name",
+          "readOnly": true
+        },
+        "progress": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Task status",
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "description": "Task status",
+          "readOnly": true
+        }
+      },
+      "description": "FTask model"
+    },
+    "Order": {
+      "required": [
+        "orderId",
+        "orderName",
+        "orderPrice"
+      ],
+      "properties": {
+        "deprecatedProperty": {
+          "type": "string",
+          "description": "Deprecated property"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "new20Property": {
+          "type": "string",
+          "description": "New 2.0 property"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Order unique identifier",
+          "readOnly": true
+        },
+        "orderName": {
+          "type": "string",
+          "description": "Order name"
+        },
+        "orderPrice": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Order Price"
+        }
+      },
+      "description": "Order model"
+    },
+    "PagedResourcesOfOrder": {
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "page": {
+          "$ref": "#/definitions/PageMetadata"
+        }
+      }
+    },
+    "Error": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code",
+          "readOnly": true
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "HTTP status message",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "description": "HTTP URL which caused the error",
+          "readOnly": true
+        }
+      }
+    }
+  }
+}
