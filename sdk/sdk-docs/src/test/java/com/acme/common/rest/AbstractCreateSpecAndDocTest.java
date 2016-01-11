@@ -47,7 +47,7 @@ public abstract class AbstractCreateSpecAndDocTest {
     protected abstract String getFeatureName();
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         this.asciiDoctor = create();
         this.outputSpecDir = new File("target/spec/");
@@ -55,6 +55,12 @@ public abstract class AbstractCreateSpecAndDocTest {
         this.outputAsciiDir = new File("target/asciidoc/" + getFeatureName());
         this.outputHtmlDir = new File("target/html/");
         this.outputPdfDir = new File("target/pdf/");
+        this.mockMvc
+                .perform(get("/spec").accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler
+                        .outputDirectory(outputAsciiDir.getAbsolutePath()).build())
+                .andExpect(status().isOk());
+
     }
 
     @Test
@@ -68,15 +74,6 @@ public abstract class AbstractCreateSpecAndDocTest {
         String springfoxSwaggerJson = mvcResult.getResponse().getContentAsString();
         SwaggerAssertions.assertThat(new Swagger20Parser().parse(springfoxSwaggerJson)).isEqualTo(
                 checkedInSwaggerSpecLocation);
-    }
-
-    @Test
-    public void convertToAsciiDoc() throws Exception {
-        this.mockMvc
-                .perform(get("/spec").accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler
-                        .outputDirectory(outputAsciiDir.getAbsolutePath()).build())
-                .andExpect(status().isOk());
     }
 
     @Test
@@ -98,16 +95,20 @@ public abstract class AbstractCreateSpecAndDocTest {
                                 getAttributes())));
 
         Assert.assertNull(
-                "rendered feature pdf output is not written to a file.",
-                this.asciiDoctor.renderFile(new File(sourceAsciiDir.getAbsolutePath()
-                        + "/feature.adoc"),
-                        getOptions("pdf", getFeatureName() + ".pdf", outputPdfDir, getAttributes())));
-
-        Assert.assertNull(
                 "rendered feature html output is not written to a file.",
                 this.asciiDoctor.renderFile(new File(sourceAsciiDir.getAbsolutePath()
                         + "/index.adoc"),
                         getOptions("html5", "index.html", outputHtmlDir, new Attributes())));
+    }
+
+    @Test
+    public void convertAsciiDocToPDF() {
+
+        Assert.assertNull(
+                "rendered feature pdf output is not written to a file.",
+                this.asciiDoctor.renderFile(new File(sourceAsciiDir.getAbsolutePath()
+                        + "/feature.adoc"),
+                        getOptions("pdf", getFeatureName() + ".pdf", outputPdfDir, getAttributes())));
 
         Assert.assertNull(
                 "rendered feature pdf output is not written to a file.",
